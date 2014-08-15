@@ -74,16 +74,6 @@ public class MainActivity extends ActionBarActivity {
 					.findViewById(R.id.editorContentLayout);
 		}
 
-<<<<<<< HEAD
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            
-            return rootView;
-        }
-    }
-=======
 		@Override
 		public void onActivityCreated(Bundle savedInstanceState) {
 			// TODO Auto-generated method stub
@@ -106,6 +96,5 @@ public class MainActivity extends ActionBarActivity {
 			});
 		}
 	}
->>>>>>> cf53b308e7fa3d07e05ef4885a401631d3cc1641
 
 }
