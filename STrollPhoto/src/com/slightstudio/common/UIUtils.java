@@ -1,7 +1,5 @@
 package com.slightstudio.common;
 
-import com.slightstudio.strollphoto.model.JFrame;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -14,6 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
+
+import com.slightstudio.application.App;
+import com.slightstudio.strollphoto.model.SFrame;
+import com.slightstudio.strollphoto.model.SSPoint;
+import com.slightstudio.strollphoto.model.SSize;
+import com.slightstudio.strollphoto.model.STemplate;
 
 public class UIUtils {
 
@@ -83,13 +87,13 @@ public class UIUtils {
 	    v.draw(ccanvas);
 	    return bitmap;
 	}
-	public static void addView(ViewGroup parent, View view, JFrame frame, double ratio) {		
+	public static void addView(ViewGroup parent, View view, SFrame frame, double ratio) {		
 
-		int newX = (int) (frame.getX() * ratio);
-		int newY = (int) (frame.getY() * ratio);
+		int newX = (int) (frame.getPoint().getX() * ratio);
+		int newY = (int) (frame.getPoint().getY() * ratio);
 
-		int newWidth = (int) (frame.getWidth() * ratio);
-		int newHeight = (int) (frame.getHeight() * ratio);
+		int newWidth = (int) (frame.getSize().getWidth() * ratio);
+		int newHeight = (int) (frame.getSize().getHeight() * ratio);
 		
 		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(newWidth, newHeight);
 		params.leftMargin = newX;
@@ -97,5 +101,64 @@ public class UIUtils {
 		params.gravity = Gravity.TOP | Gravity.LEFT;
 
 		parent.addView(view, params);
+	}
+	
+	public static SFrame calculateFrameBaseOnRatio(STemplate jTemplate) {
+		int bottomBarHeight = (int) UIUtils.dp2px(60);
+		int actionBarHeight = 0;
+		int statusBarHeight = UIUtils.statusBarHeight();
+
+		int padding = 0;
+
+		int maxWidth = UIUtils.screenWidth() - padding * 2;
+		int maxHeight = UIUtils.screenHeight() - actionBarHeight
+				- statusBarHeight - bottomBarHeight - padding * 2;
+
+		SSize designSize = jTemplate.getSize();
+		double designWidth = designSize.getWidth();
+		double designHeight = designSize.getHeight();
+
+		SSize actualSize = new SSize();
+
+		if (designHeight > designWidth) {
+			// this is portrait template so the ratio should be w=2 / h=3
+			if (maxWidth * 3 > maxHeight * 2) {
+				actualSize.setHeight(maxHeight);
+				actualSize.setWidth(maxHeight * 2 / 3);
+			} else {
+				actualSize.setWidth(maxWidth);
+				actualSize.setHeight(maxWidth * 3 / 2);
+			}
+		} else if (designHeight == designWidth) {
+			// this is square template so ratio is 1 we will take the small
+			// one
+			int min = Math.min(maxWidth, maxHeight);
+			actualSize.setWidth(min);
+			actualSize.setHeight(min);
+		} else {
+			// this is landscape template so the ratio should be w=3 / h=2
+			if (maxHeight * 3 > maxWidth * 2) {
+				actualSize.setWidth(maxWidth);
+				actualSize.setHeight(maxWidth * 2 / 3);
+			} else {
+				actualSize.setHeight(maxHeight);
+				actualSize.setWidth(maxHeight * 3 / 2);
+
+			}
+		}
+
+		// we need ratio to calculate frame for each item inside the
+		// template
+		// later
+		double ratio = actualSize.getWidth()
+				/ jTemplate.getSize().getWidth();
+		jTemplate.setRatio(ratio);
+
+		double x = (maxWidth - actualSize.getWidth()) / 2;
+		double y = (maxHeight - actualSize.getHeight()) / 2;
+
+		return new SFrame(new SSPoint(x / ratio, y / ratio), new SSize(
+				actualSize.getWidth() / ratio, actualSize.getHeight()
+						/ ratio));
 	}
 }

@@ -18,6 +18,8 @@ import java.util.List;
 import android.content.res.AssetManager;
 import android.os.Environment;
 
+import com.slightstudio.application.App;
+
 public class FileUtils {
 
 	public static final String INTERNAL_FILE_PROTOCOL = "file://";

@@ -1,7 +1,9 @@
-package com.slightstudio.common;
+package com.slightstudio.application;
 
 import android.app.Application;
 import android.content.Context;
+
+import com.slightstudio.common.FileUtils;
 
 public class App extends Application {
 	

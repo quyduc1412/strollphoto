@@ -1,15 +1,6 @@
 package com.slightstudio.strollphoto.model;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.slightstudio.common.JSONUtils;
 
 public class JTemplate {
 	private String name;
